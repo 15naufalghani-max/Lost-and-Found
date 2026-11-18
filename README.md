@@ -19,7 +19,7 @@ An application for tracking students lost item and gave back their lost item.
 | Name 				            | Student no. | Part built 				                     |
 |-------------------------------|-------------|----------------------------------------------|
 | Firyal Humaira Asyaffa 	    | 2510512082  | UI/UX Designer & Frontend Lead 		         |
-| Kenzia Zahwa Eddyputri 	    | 2510512122  | Frontend Developer (Lost & Found) 	         |
+| Kenzia Zahwa Eddyputri 	    | 2510512121  | Frontend Developer (Lost & Found) 	         |
 | Kenny Tana Haholongan Pandia  | 2510512027  | Backend Developer (System & Database) 	     |
 | Muhammad Naufal Ghani 	    | 2510512072  | Backend Developer (Claim & Verification)     |
 | Tracy Gabriella Donda Sitorus | 2510512122  | Frontend Developer (Search & Interaction)    |
