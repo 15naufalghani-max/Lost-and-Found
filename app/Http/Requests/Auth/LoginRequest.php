@@ -45,7 +45,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => 'Email kampus wajib diisi.',
             'email.email' => 'Format email tidak valid.',
-            'email.regex' => 'Login wajib menggunakan email resmi kampus (@upnvj.ac.id).',
+            'email.regex' => 'Login wajib menggunakan email resmi UPNVJ (@mahasiswa.upnvj.ac.id atau @dosen.upnvj.ac.id).',
             'password.required' => 'Kata sandi wajib diisi.',
         ];
     }

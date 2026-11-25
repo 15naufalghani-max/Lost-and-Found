@@ -45,7 +45,8 @@ class ModelRelationshipTest extends TestCase
         $this->seed(DatabaseSeeder::class);
         $this->seed(DatabaseSeeder::class);
 
-        $this->assertDatabaseHas('users', ['email' => 'kenny@upnvj.ac.id', 'nim' => '2510512027']);
+        $this->assertDatabaseHas('users', ['email' => 'kenny@mahasiswa.upnvj.ac.id', 'nim' => '2510512027']);
+        $this->assertDatabaseHas('users', ['email' => 'dosen@dosen.upnvj.ac.id']);
         $this->assertGreaterThanOrEqual(6, Item::count());
         $this->assertGreaterThanOrEqual(3, Comment::count());
         $this->assertGreaterThanOrEqual(2, Claim::count());

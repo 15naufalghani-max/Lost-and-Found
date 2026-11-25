@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class UserSeeder extends Seeder
 {
     /**
-     * Seed dummy UPNVJ student accounts for development and frontend testing.
+     * Seed dummy UPNVJ student and lecturer accounts for development and frontend testing.
      */
     public function run(): void
     {
@@ -17,32 +17,37 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Kenny Tana Haholongan Pandia',
                 'nim' => '2510512027',
-                'email' => 'kenny@upnvj.ac.id',
+                'email' => 'kenny@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Muhammad Naufal Ghani',
                 'nim' => '2510512072',
-                'email' => 'naufal@upnvj.ac.id',
+                'email' => 'naufal@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Firyal Humaira Asyaffa',
                 'nim' => '2510512082',
-                'email' => 'firyal@upnvj.ac.id',
+                'email' => 'firyal@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Kenzia Zahwa Eddyputri',
                 'nim' => '2510512121',
-                'email' => 'kenzia@upnvj.ac.id',
+                'email' => 'kenzia@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Tracy Gabriella Donda Sitorus',
                 'nim' => '2510512122',
-                'email' => 'tracy@upnvj.ac.id',
+                'email' => 'tracy@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Vrista Darin Nadira',
                 'nim' => '2510512119',
-                'email' => 'vrista@upnvj.ac.id',
+                'email' => 'vrista@mahasiswa.upnvj.ac.id',
+            ],
+            [
+                'name' => 'Dosen FIK UPNVJ',
+                'nim' => null,
+                'email' => 'dosen@dosen.upnvj.ac.id',
             ],
         ];
 

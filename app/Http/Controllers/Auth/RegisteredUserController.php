@@ -33,6 +33,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect()->route('verification.notice')
-            ->with('status', 'Pendaftaran berhasil! Silakan cek email @upnvj.ac.id Anda untuk verifikasi.');
+            ->with('status', 'Pendaftaran berhasil! Silakan cek email kampus (@mahasiswa.upnvj.ac.id / @dosen.upnvj.ac.id) Anda untuk verifikasi.');
     }
 }

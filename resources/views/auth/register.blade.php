@@ -9,7 +9,7 @@
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-white rounded-xl shadow-sm border border-slate-200 p-6">
         <h1 class="text-2xl font-bold text-slate-900">Daftar Akun Mahasiswa</h1>
-        <p class="text-sm text-slate-600 mt-1">Pendaftaran khusus civitas akademika UPNVJ (@upnvj.ac.id).</p>
+        <p class="text-sm text-slate-600 mt-1">Pendaftaran khusus civitas akademika UPNVJ (@mahasiswa.upnvj.ac.id / @dosen.upnvj.ac.id).</p>
 
         <form method="POST" action="{{ route('register') }}" class="mt-6 space-y-4">
             @csrf
@@ -34,7 +34,7 @@
             <div>
                 <label for="email" class="block text-sm font-medium text-slate-700">Email UPNVJ</label>
                 <input id="email" name="email" type="email" value="{{ old('email') }}" required
-                    placeholder="nama@upnvj.ac.id"
+                    placeholder="2510512xxx@mahasiswa.upnvj.ac.id atau nama@dosen.upnvj.ac.id"
                     class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600">
                 @error('email')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>

@@ -13,7 +13,7 @@ Route::get('/', function () {
     return view()->exists('home') ? view('home') : view('welcome');
 })->name('home');
 
-// Guest authentication routes (@upnvj.ac.id)
+// Guest authentication routes (@mahasiswa.upnvj.ac.id / @dosen.upnvj.ac.id)
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);

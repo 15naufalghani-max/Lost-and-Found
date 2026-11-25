@@ -9,7 +9,7 @@
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-white rounded-xl shadow-sm border border-slate-200 p-6">
         <h1 class="text-2xl font-bold text-slate-900">Masuk Lost &amp; Found</h1>
-        <p class="text-sm text-slate-600 mt-1">Gunakan email resmi kampus (@upnvj.ac.id).</p>
+        <p class="text-sm text-slate-600 mt-1">Gunakan email resmi UPNVJ (@mahasiswa.upnvj.ac.id atau @dosen.upnvj.ac.id).</p>
 
         @if (session('status'))
             <div class="mt-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-700">
@@ -22,7 +22,7 @@
             <div>
                 <label for="email" class="block text-sm font-medium text-slate-700">Email UPNVJ</label>
                 <input id="email" name="email" type="email" value="{{ old('email') }}" required autofocus
-                    placeholder="nama@upnvj.ac.id"
+                    placeholder="nama@mahasiswa.upnvj.ac.id"
                     class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600">
                 @error('email')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>

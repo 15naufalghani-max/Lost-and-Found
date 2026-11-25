@@ -58,7 +58,7 @@ class RegisterRequest extends FormRequest
             'email.required' => 'Email kampus wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email ini sudah terdaftar.',
-            'email.regex' => 'Pendaftaran wajib menggunakan email resmi kampus (@upnvj.ac.id).',
+            'email.regex' => 'Pendaftaran wajib menggunakan email resmi UPNVJ (@mahasiswa.upnvj.ac.id atau @dosen.upnvj.ac.id).',
             'password.required' => 'Kata sandi wajib diisi.',
             'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
         ];
