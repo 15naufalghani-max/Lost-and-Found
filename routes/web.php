@@ -10,7 +10,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view()->exists('home') ? view('home') : view('welcome');
+    return view()->exists('home') ? view('home') : view('home');
 })->name('home');
 
 // Guest authentication routes (@mahasiswa.upnvj.ac.id / @dosen.upnvj.ac.id)
