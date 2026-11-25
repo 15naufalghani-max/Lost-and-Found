@@ -12,7 +12,7 @@
             <a href="{{ route('items.index') }}" class="font-bold text-lg text-emerald-700">Lost &amp; Found UPNVJ</a>
             <div class="flex items-center gap-3 text-sm">
                 @auth
-                    <span class="text-slate-600">{{ auth()->user()->name }}</span>
+                    <a href="{{ route('profile.index') }}" class="text-slate-600 hover:underline">{{ auth()->user()->name }}</a>
                     <a href="{{ route('items.create') }}" class="rounded-lg bg-emerald-600 text-white px-3 py-1.5 font-medium">+ Lapor Barang</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -26,12 +26,35 @@
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 py-8">
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-6">
         @if (session('status'))
-            <div class="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-700">
+            <div class="rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-700">
                 {{ session('status') }}
             </div>
         @endif
+
+        <form method="GET" action="{{ route('items.index') }}" class="bg-white rounded-xl border border-slate-200 p-4 grid grid-cols-1 md:grid-cols-6 gap-3">
+            <input type="text" name="search" value="{{ $filters['search'] ?? $filters['q'] ?? '' }}" placeholder="Cari barang, lokasi..."
+                class="md:col-span-2 rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            <select name="type" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="">Semua Jenis</option>
+                <option value="lost" @selected(($filters['type'] ?? '') === 'lost')>Lost (Hilang)</option>
+                <option value="found" @selected(($filters['type'] ?? '') === 'found')>Found (Ditemukan)</option>
+            </select>
+            <select name="category" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="">Semua Kategori</option>
+                @foreach ($categories as $cat)
+                    <option value="{{ $cat }}" @selected(($filters['category'] ?? '') === $cat)>{{ $cat }}</option>
+                @endforeach
+            </select>
+            <select name="status" class="rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="">Semua Status</option>
+                @foreach ($statuses as $st)
+                    <option value="{{ $st }}" @selected(($filters['status'] ?? '') === $st)>{{ ucfirst($st) }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="rounded-lg bg-emerald-600 text-white px-4 py-2 text-sm font-medium">Filter</button>
+        </form>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @forelse ($items as $item)
@@ -52,7 +75,7 @@
             @endforelse
         </div>
 
-        <div class="mt-6">
+        <div>
             {{ $items->links() }}
         </div>
     </main>

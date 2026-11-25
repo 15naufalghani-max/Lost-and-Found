@@ -3,8 +3,10 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,17 +36,25 @@ Route::middleware('auth')->group(function () {
         ->name('verification.send');
 });
 
-// Verified-user item write & comment routes (create must come before {item})
+// Verified-user item write, claim, comment, and profile routes (create must come before {item})
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
     Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
     Route::post('/items', [ItemController::class, 'store'])->name('items.store');
     Route::get('/items/{item}/edit', [ItemController::class, 'edit'])->name('items.edit');
     Route::put('/items/{item}', [ItemController::class, 'update'])->name('items.update');
     Route::patch('/items/{item}', [ItemController::class, 'update']);
     Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('items.destroy');
+    Route::match(['post', 'patch'], '/items/{item}/found', [ClaimController::class, 'markFound'])->name('items.found');
 
     Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::get('/items/{item}/claims/create', [ClaimController::class, 'create'])->name('claims.create');
+    Route::post('/items/{item}/claims', [ClaimController::class, 'store'])->name('claims.store');
+    Route::match(['post', 'patch'], '/claims/{claim}/approve', [ClaimController::class, 'approve'])->name('claims.approve');
+    Route::match(['post', 'patch'], '/claims/{claim}/reject', [ClaimController::class, 'reject'])->name('claims.reject');
 });
 
 // Public item catalog & detail routes

@@ -22,8 +22,10 @@ abstract class ItemFormRequest extends FormRequest
             'location' => ['required', 'string', 'max:150'],
             'description' => ['required', 'string', 'min:10', 'max:2000'],
             'event_at' => ['nullable', 'date', 'before_or_equal:now'],
+            'expires_at' => ['nullable', 'date', 'after:now'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'verification_question' => ['nullable', 'string', 'max:255'],
+            'verification_answer' => ['nullable', 'string', 'max:255'],
         ];
     }
 

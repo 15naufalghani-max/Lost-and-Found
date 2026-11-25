@@ -42,6 +42,7 @@ class ItemSeeder extends Seeder
                 'event_at' => now()->subDay(),
                 'expires_at' => now()->addDays(29),
                 'verification_question' => 'Sebutkan gambar stiker yang menempel di bagian bawah tumbler?',
+                'verification_answer' => 'logo FIK UPNVJ',
             ],
             [
                 'user_id' => $users[2 % $users->count()]->id,
@@ -66,6 +67,7 @@ class ItemSeeder extends Seeder
                 'event_at' => now()->subHours(8),
                 'expires_at' => now()->addDays(30),
                 'verification_question' => 'Apa warna gantungan kunci atau tulisan pada tag kuncinya?',
+                'verification_answer' => 'kuning',
             ],
             [
                 'user_id' => $users[4 % $users->count()]->id,

@@ -5,30 +5,38 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Models\Item;
+use App\Services\Matching\ItemSnapshot;
+use App\Services\Matching\KeywordMatcher;
+use App\Services\Matching\MatchProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ItemController extends Controller
 {
     /**
-     * Display a paginated listing of lost and found items.
+     * Display a filtered and paginated listing of lost and found items.
      */
     public function index(Request $request): View
     {
-        $type = $request->string('type')->toString();
+        Item::expireOverdue();
+
+        $filters = $request->only(['search', 'q', 'type', 'category', 'location', 'status']);
 
         $items = Item::with('user')
-            ->when(in_array($type, Item::TYPES, true), fn ($q) => $q->where('type', $type))
+            ->filter($filters)
             ->latest()
             ->paginate(12)
             ->withQueryString();
 
         return $this->renderView('items.index', 'backend.items.index', [
             'items' => $items,
+            'filters' => $filters,
             'categories' => Item::CATEGORIES,
             'locations' => Item::LOCATIONS,
+            'statuses' => Item::STATUSES,
         ]);
     }
 
@@ -53,7 +61,7 @@ class ItemController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['status'] = Item::STATUS_OPEN;
         $data['event_at'] = $data['event_at'] ?? now();
-        $data['expires_at'] = now()->addDays(30);
+        $data['expires_at'] = $data['expires_at'] ?? now()->addDays(30);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('items', 'public');
@@ -66,17 +74,25 @@ class ItemController extends Controller
     }
 
     /**
-     * Display the specified item along with its comments.
+     * Display the specified item along with comments, claims, and smart matches.
      */
-    public function show(Item $item): View
+    public function show(Item $item, MatchProvider $matcher, KeywordMatcher $fallback): View
     {
+        if ($item->status === Item::STATUS_OPEN && $item->isExpired()) {
+            $item->update(['status' => Item::STATUS_EXPIRED]);
+        }
+
         $item->load([
             'user',
             'comments' => fn ($q) => $q->with('user')->latest(),
+            'claims' => fn ($q) => $q->with('user')->latest(),
         ]);
+
+        $matches = $this->findSmartMatches($item, $matcher, $fallback);
 
         return $this->renderView('items.show', 'backend.items.show', [
             'item' => $item,
+            'matches' => $matches,
         ]);
     }
 
@@ -130,6 +146,52 @@ class ItemController extends Controller
 
         return redirect()->route('items.index')
             ->with('status', 'Laporan barang berhasil dihapus.');
+    }
+
+    /**
+     * Suggest matching found items for an open lost item using AI with keyword fallback.
+     *
+     * @return Collection<int, array{item: Item, score: int, reason: string}>
+     */
+    private function findSmartMatches(Item $item, MatchProvider $matcher, KeywordMatcher $fallback): Collection
+    {
+        if ($item->type !== Item::TYPE_LOST || $item->status !== Item::STATUS_OPEN) {
+            return collect();
+        }
+
+        $candidates = Item::query()
+            ->found()
+            ->open()
+            ->where('id', '!=', $item->id)
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        if ($candidates->isEmpty()) {
+            return collect();
+        }
+
+        $lostSnapshot = ItemSnapshot::from($item);
+        $candSnapshots = $candidates->map(fn (Item $c) => ItemSnapshot::from($c));
+
+        try {
+            $scores = $matcher->score($lostSnapshot, $candSnapshots);
+        } catch (\Throwable) {
+            $scores = $fallback->score($lostSnapshot, $candSnapshots);
+        }
+
+        $byId = $candidates->keyBy('id');
+
+        return collect($scores)
+            ->filter(fn (array $row) => ($row['score'] ?? 0) > 0 && $byId->has($row['id']))
+            ->sortByDesc('score')
+            ->take(3)
+            ->map(fn (array $row) => [
+                'item' => $byId->get($row['id']),
+                'score' => (int) $row['score'],
+                'reason' => (string) ($row['reason'] ?? ''),
+            ])
+            ->values();
     }
 
     /**

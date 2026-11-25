@@ -70,6 +70,14 @@ class Item extends Model
         'event_at',
         'expires_at',
         'verification_question',
+        'verification_answer',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected $hidden = [
+        'verification_answer',
     ];
 
     /**
@@ -111,5 +119,52 @@ class Item extends Model
     public function scopeFound(Builder $query): Builder
     {
         return $query->where('type', self::TYPE_FOUND);
+    }
+
+    /**
+     * Filter items by keyword, type, category, location, and status.
+     *
+     * @param array<string, mixed> $filters
+     */
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        $keyword = trim((string) ($filters['search'] ?? $filters['q'] ?? ''));
+        $type = (string) ($filters['type'] ?? '');
+        $category = (string) ($filters['category'] ?? '');
+        $location = (string) ($filters['location'] ?? '');
+        $status = (string) ($filters['status'] ?? '');
+
+        return $query
+            ->when($keyword !== '', function (Builder $q) use ($keyword) {
+                $like = '%' . addcslashes($keyword, '%_\\') . '%';
+                $q->where(function (Builder $sub) use ($like) {
+                    $sub->where('title', 'like', $like)
+                        ->orWhere('description', 'like', $like)
+                        ->orWhere('location', 'like', $like)
+                        ->orWhere('category', 'like', $like);
+                });
+            })
+            ->when(in_array($type, self::TYPES, true), fn (Builder $q) => $q->where('type', $type))
+            ->when($category !== '' && $category !== 'all', fn (Builder $q) => $q->where('category', $category))
+            ->when($location !== '' && $location !== 'all', fn (Builder $q) => $q->where('location', $location))
+            ->when(in_array($status, self::STATUSES, true), fn (Builder $q) => $q->where('status', $status));
+    }
+
+    /**
+     * Transition any open items past their expires_at timestamp to expired.
+     */
+    public static function expireOverdue(): int
+    {
+        return static::query()
+            ->where('status', self::STATUS_OPEN)
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<=', now())
+            ->update(['status' => self::STATUS_EXPIRED]);
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->status === self::STATUS_EXPIRED
+            || ($this->status === self::STATUS_OPEN && $this->expires_at !== null && $this->expires_at->isPast());
     }
 }

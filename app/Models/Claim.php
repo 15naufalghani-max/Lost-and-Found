@@ -55,4 +55,25 @@ class Claim extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Compare a claimant's submitted answer against the item's secret verification answer.
+     */
+    public static function matchesSecretAnswer(string $submitted, ?string $expected): bool
+    {
+        $normalizedExpected = self::normalizeText((string) $expected);
+        $normalizedSubmitted = self::normalizeText($submitted);
+
+        if ($normalizedExpected === '' || $normalizedSubmitted === '') {
+            return false;
+        }
+
+        return $normalizedSubmitted === $normalizedExpected
+            || str_contains($normalizedSubmitted, $normalizedExpected);
+    }
+
+    private static function normalizeText(string $value): string
+    {
+        return preg_replace('/\s+/u', ' ', mb_strtolower(trim($value))) ?? '';
+    }
 }

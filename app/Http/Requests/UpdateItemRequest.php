@@ -22,7 +22,7 @@ class UpdateItemRequest extends ItemFormRequest
     public function rules(): array
     {
         return array_merge($this->itemRules(), [
-            'status' => ['sometimes', 'string', Rule::in([Item::STATUS_OPEN, Item::STATUS_RESOLVED])],
+            'status' => ['sometimes', 'string', Rule::in(Item::STATUSES)],
         ]);
     }
 }
