@@ -1,3 +1,48 @@
+{{--
+    Layout utama FIK Lost & Found.
+    Cara pakai di halaman lain:
+        @extends('layouts.app')
+        @section('title', 'Judul Halaman')
+        @section('content') ... @endsection
+--}}
+@php
+    // Link menu. Semuanya menuju section di halaman beranda.
+    $menu = [
+        ['label' => 'Cara Kerja', 'url' => url('/#cara-kerja')],
+        ['label' => 'Kategori', 'url' => url('/#kategori')],
+        ['label' => 'Smart Matching', 'url' => url('/#smart-matching')],
+        ['label' => 'Privasi', 'url' => url('/#privasi')],
+        ['label' => 'Layanan PJ', 'url' => url('/#layanan-pj')],
+    ];
+
+    // TODO tim backend: ganti null dengan route('...') setelah route-nya ada.
+    // Selama null, link tampil tetapi belum bisa diklik.
+    $halaman = [
+        'masuk' => null,
+        'daftar' => null,
+        'lupa_password' => null,
+        'kebijakan_privasi' => null,
+    ];
+
+    // Isi kolom footer.
+    $footer = [
+        'Jelajahi' => [
+            ['label' => 'Cara Kerja', 'url' => url('/#cara-kerja')],
+            ['label' => 'Kategori', 'url' => url('/#kategori')],
+            ['label' => 'Smart Matching', 'url' => url('/#smart-matching')],
+            ['label' => 'Layanan PJ', 'url' => url('/#layanan-pj')],
+        ],
+        'Akun' => [
+            ['label' => 'Masuk', 'url' => $halaman['masuk']],
+            ['label' => 'Daftar', 'url' => $halaman['daftar']],
+            ['label' => 'Lupa password', 'url' => $halaman['lupa_password']],
+        ],
+        'Informasi' => [
+            ['label' => 'Privasi & Keamanan', 'url' => url('/#privasi')],
+            ['label' => 'Kebijakan Privasi', 'url' => $halaman['kebijakan_privasi']],
+        ],
+    ];
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
