@@ -15,40 +15,42 @@
     ];
 @endphp
 
-<section>
-    {{-- Judul Bagian --}}
-    <h3>Komentar ({{ count($comments ?? [] ) }})</h3>
+<section class="comment-wrapper">
+    <div class="comment-card">
+        {{-- Judul Bagian --}}
+        <h3 class="comment-heading">Komentar ({{ count($comments ?? []) }})</h3>
 
-    {{-- 2. FORM INPUT KOMENTAR --}}
-    <form action="" method="POST" class="">
-        @csrf
-        <div>
-            <label>
-                <textarea name="comment" id="comment" cols="30" rows="5" 
-                class="btn btn--plain btn--wide flow__switch"
+        {{-- 2. FORM INPUT KOMENTAR --}}
+        <form action="" method="POST" class="">
+            @csrf
+            <div class="comment_field">
+                <label for="comment-body" class="comment-label"> Tulis Komentar
+                </label>
+                <textarea name="comment" id="comment" cols="30" rows="5" class="comment-textarea"
                     placeholder="Tulis komentar Anda di sini..."></textarea>
-            </label>
-        </div>
-
-        <br>
-        <button type="submit" class="btn btn--olive">Kirim</button>
-    </form>
-
-    {{-- 3. DAFTAR KOMENTAR YANG SUDAH MASUK --}}
-    <div>
-        @forelse ($comments as $comment)
-            <div>
-                <p>
-                    <strong>{{ $comment->user_name }}</strong> 
-                    <small>• {{ $comment->created_at }}</small>
-                </p>
-                <p>{{ $comment->body }}</p>
             </div>
-            <hr>
-        @empty
-            <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
-        @endforelse
+
+            <div class="comment-actions">
+                <button type="submit" class="comment-btn">Kirim</button>
+            </div>
+        </form>
+
+        <hr class="comment-divider">
+
+        {{-- 3. DAFTAR KOMENTAR YANG SUDAH MASUK --}}
+        <div class="comment-list">
+            @forelse ($comments as $comment)
+                <div class="comment-item">
+                    <div class="comment-item-header">
+                        <strong class="comment-author">{{ $comment->user_name }}</strong>
+                        <span class="comment-time">{{ $comment->created_at }}</span>
+                    </div>
+                    <p class="comment-body">{{ $comment->body }}</p>
+                </div>
+
+            @empty
+                <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+            @endforelse
+        </div>
     </div>
-
-
 </section>

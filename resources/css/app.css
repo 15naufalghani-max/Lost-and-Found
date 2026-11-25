@@ -1840,3 +1840,6 @@ a[aria-disabled='true'] {
         transition: none;
     }
 }
+
+@import './comments.css';
+
