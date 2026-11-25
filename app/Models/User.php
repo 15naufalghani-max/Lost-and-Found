@@ -14,6 +14,8 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public const CAMPUS_EMAIL_REGEX = '/^[a-zA-Z0-9._%+-]+@upnvj\.ac\.id$/i';
+
     /**
      * The attributes that are mass assignable.
      *

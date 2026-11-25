@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreCommentRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return $this->user() !== null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+            'body' => ['required', 'string', 'min:2', 'max:1000'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'body.required' => 'Komentar tidak boleh kosong.',
+            'body.min' => 'Komentar minimal 2 karakter.',
+            'body.max' => 'Komentar maksimal 1000 karakter.',
+        ];
+    }
+}
