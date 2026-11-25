@@ -15,34 +15,34 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Kenny Tana Haholongan Pandia',
+                'name' => 'Kenny Tanna Haholongan Pandia',
                 'nim' => '2510512027',
-                'email' => 'kenny@mahasiswa.upnvj.ac.id',
+                'email' => '2510512027@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Muhammad Naufal Ghani',
                 'nim' => '2510512072',
-                'email' => 'naufal@mahasiswa.upnvj.ac.id',
+                'email' => '2510512072@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Firyal Humaira Asyaffa',
                 'nim' => '2510512082',
-                'email' => 'firyal@mahasiswa.upnvj.ac.id',
+                'email' => '2510512082@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Kenzia Zahwa Eddyputri',
                 'nim' => '2510512121',
-                'email' => 'kenzia@mahasiswa.upnvj.ac.id',
+                'email' => '2510512121@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Tracy Gabriella Donda Sitorus',
                 'nim' => '2510512122',
-                'email' => 'tracy@mahasiswa.upnvj.ac.id',
+                'email' => '2510512122@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Vrista Darin Nadira',
                 'nim' => '2510512119',
-                'email' => 'vrista@mahasiswa.upnvj.ac.id',
+                'email' => '2510512119@mahasiswa.upnvj.ac.id',
             ],
             [
                 'name' => 'Dosen FIK UPNVJ',
