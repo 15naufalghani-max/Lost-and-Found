@@ -121,6 +121,13 @@ class Item extends Model
         return $query->where('type', self::TYPE_FOUND);
     }
 
+    public function claimants(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'claims')
+            ->withPivot('id', 'answer', 'proof_image', 'status', 'reviewed_at')
+            ->withTimestamps();
+    }
+
     /**
      * Filter items by keyword, type, category, location, and status.
      *

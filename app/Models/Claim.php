@@ -11,6 +11,7 @@ class Claim extends Model
 {
     /** @use HasFactory<ClaimFactory> */
     use HasFactory;
+    public const MAX_ATTEMPTS = 3;
 
     public const STATUS_PENDING = 'pending';
 
@@ -27,6 +28,9 @@ class Claim extends Model
     /**
      * @var list<string>
      */
+    protected $table = 'claims';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
     protected $fillable = [
         'item_id',
         'user_id',

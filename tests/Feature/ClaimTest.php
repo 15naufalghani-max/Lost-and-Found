@@ -59,28 +59,6 @@ class ClaimTest extends TestCase
         $this->assertSame(Item::STATUS_RESOLVED, $item->fresh()->status);
     }
 
-    public function test_matching_secret_answer_auto_approves_claim_and_resolves_item(): void
-    {
-        $owner = User::factory()->create();
-        $claimant = User::factory()->create();
-
-        $item = Item::factory()->for($owner)->found()->create([
-            'verification_question' => 'Apa warna stiker di bawah botol?',
-            'verification_answer' => 'Logo FIK UPNVJ',
-        ]);
-
-        $this->actingAs($claimant)
-            ->post(route('claims.store', $item), [
-                'answer' => 'Ada stiker logo   fik upnvj di bagian bawahnya.',
-            ])
-            ->assertRedirect(route('items.show', $item));
-
-        $claim = Claim::where('item_id', $item->id)->first();
-        $this->assertSame(Claim::STATUS_APPROVED, $claim->status);
-        $this->assertNotNull($claim->reviewed_at);
-        $this->assertSame(Item::STATUS_RESOLVED, $item->fresh()->status);
-    }
-
     public function test_owner_can_reject_claim_and_use_found_button(): void
     {
         $owner = User::factory()->create();

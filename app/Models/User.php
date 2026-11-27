@@ -6,6 +6,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -64,5 +65,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function claims(): HasMany
     {
         return $this->hasMany(Claim::class);
+    }
+    public function claimedItems(): BelongsToMany
+    {
+        return $this->belongsToMany(Item::class, 'claims')
+            ->withPivot('id', 'answer', 'proof_image', 'status', 'reviewed_at')
+            ->withTimestamps();
     }
 }

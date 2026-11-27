@@ -60,3 +60,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Public item catalog & detail routes
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
+require __DIR__.'/claims.php';

@@ -76,6 +76,12 @@
                                 <p class="text-sm font-medium">{{ $claim->user->name }} <span class="text-xs text-slate-500">({{ $claim->status }})</span></p>
                                 <p class="text-sm text-slate-700 mt-1">{{ $claim->answer }}</p>
                             </div>
+                            @if (\App\Models\Claim::matchesSecretAnswer($claim->answer, $item->verification_answer))
+                                <span class="text-xs text-emerald-700">Jawaban cocok dengan jawaban rahasia</span>
+                            @endif
+                            @if ($claim->proof_image)
+                                <a href="{{ route('claims.proof', $claim) }}" class="text-xs text-sky-700 underline">Unduh bukti</a>
+                            @endif
                             @if ($claim->status === 'pending')
                                 <div class="flex gap-2">
                                     <form method="POST" action="{{ route('claims.approve', $claim) }}">
@@ -87,6 +93,12 @@
                                         <button class="rounded bg-red-600 text-white px-3 py-1 text-xs">Tolak</button>
                                     </form>
                                 </div>
+                            @endif
+                            @php($mine = $item->claims->firstWhere('user_id', auth()->id()))
+                            @if ($mine && $mine->status === 'pending')
+                                <form method="POST" action="{{ route('claims.cancel', $mine) }}">@csrf @method('DELETE')
+                                    <button class="rounded border px-3 py-1 text-xs">Batalkan klaim</button>
+                                </form>
                             @endif
                         </div>
                     @endforeach
