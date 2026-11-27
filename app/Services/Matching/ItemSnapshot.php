@@ -22,6 +22,7 @@ final readonly class ItemSnapshot
             (string) $item->description,
             (string) $item->location,
             $item->event_at,
+            $item->event_at ?? $item->created_at ?? now(),
         );
     }
 }

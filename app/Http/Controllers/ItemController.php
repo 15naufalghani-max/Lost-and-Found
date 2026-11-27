@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Models\Item;
-use App\Services\Matching\ItemSnapshot;
-use App\Services\Matching\KeywordMatcher;
-use App\Services\Matching\MatchProvider;
+use App\Services\SmartMatchService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -76,7 +73,7 @@ class ItemController extends Controller
     /**
      * Display the specified item along with comments, claims, and smart matches.
      */
-    public function show(Item $item, MatchProvider $matcher, KeywordMatcher $fallback): View
+    public function show(Item $item, SmartMatchService $smartMatch): View
     {
         if ($item->status === Item::STATUS_OPEN && $item->isExpired()) {
             $item->update(['status' => Item::STATUS_EXPIRED]);
@@ -88,7 +85,7 @@ class ItemController extends Controller
             'claims' => fn ($q) => $q->with('user')->latest(),
         ]);
 
-        $matches = $this->findSmartMatches($item, $matcher, $fallback);
+        $matches = $smartMatch->matchesFor($item);
 
         return $this->renderView('items.show', 'backend.items.show', [
             'item' => $item,
