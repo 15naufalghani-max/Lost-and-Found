@@ -65,4 +65,12 @@ class SmartMatchServiceTest extends TestCase
         $this->assertSame('ai', $first->first()['source']);
         $this->assertSame(1, $spy->calls);
     }
+    public function test_matches_are_shown_to_logged_in_users_only(): void
+    {
+        [$lost] = $this->items();
+
+        $this->get(route('items.show', $lost))->assertDontSee('Rekomendasi Barang Cocok');
+        $this->actingAs(User::factory()->create())
+            ->get(route('items.show', $lost))->assertSee('Rekomendasi Barang Cocok');
+    }
 }

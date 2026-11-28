@@ -85,7 +85,7 @@ class ItemController extends Controller
             'claims' => fn ($q) => $q->with('user')->latest(),
         ]);
 
-        $matches = $smartMatch->matchesFor($item);
+        $matches = auth()->check() ? $smartMatch->matchesFor($item) : collect();
 
         return $this->renderView('items.show', 'backend.items.show', [
             'item' => $item,
