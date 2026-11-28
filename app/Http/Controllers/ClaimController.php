@@ -29,11 +29,6 @@ class ClaimController extends Controller
                 ->with('error', 'Barang ini sudah tidak menerima klaim.');
         }
 
-        if ($item->status !== Item::STATUS_OPEN || $item->isExpired()) {
-            return redirect()->route('items.show', $item)
-                ->with('error', 'Barang ini sudah tidak menerima klaim.');
-        }
-
         if ($item->type !== Item::TYPE_FOUND) {
             return redirect()->route('items.show', $item)
                 ->with('error', 'Klaim hanya dapat diajukan untuk barang temuan.');
@@ -61,11 +56,7 @@ class ClaimController extends Controller
             return back()->with('error', 'Barang ini sudah selesai atau kadaluwarsa.');
         }
 
-                if ($item->status !== Item::STATUS_OPEN || $item->isExpired()) {
-            return back()->with('error', 'Barang ini sudah selesai atau kadaluwarsa.');
-        }
-
-        if ($item->type !== Item::TYPE_FOUND) {                       // ← BARU
+        if ($item->type !== Item::TYPE_FOUND) {
             return back()->with('error', 'Klaim hanya dapat diajukan untuk barang temuan.');
         }
 
@@ -85,7 +76,7 @@ class ClaimController extends Controller
 
         $validated = $request->validated();
         $proofPath = $request->hasFile('proof_image')
-            ? $request->file('proof_image')->store('claims', 'public')
+            ? $request->file('proof_image')->store('claims', 'local')
             : null;
 
         // Klaim selalu menunggu keputusan pemilik. Kecocokan jawaban hanya petunjuk untuk pemilik.
@@ -134,7 +125,7 @@ class ClaimController extends Controller
         }
 
         if ($claim->proof_image) {
-            Storage::disk('public')->delete($claim->proof_image);
+            Storage::disk('local')->delete($claim->proof_image);
         }
 
         $request->user()->claimedItems()
@@ -148,9 +139,9 @@ class ClaimController extends Controller
     {
         $userId = $request->user()->id;
         abort_unless($userId === $claim->user_id || $userId === $claim->item->user_id, 403);
-        abort_if(! $claim->proof_image || ! Storage::disk('public')->exists($claim->proof_image), 404);
+        abort_if(! $claim->proof_image || ! Storage::disk('local')->exists($claim->proof_image), 404);
 
-        return Storage::disk('public')->download(
+        return Storage::disk('local')->download(
             $claim->proof_image,
             'bukti-klaim-'.$claim->id.'.'.pathinfo($claim->proof_image, PATHINFO_EXTENSION)
         );
