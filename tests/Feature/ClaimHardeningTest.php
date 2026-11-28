@@ -55,8 +55,8 @@ class ClaimHardeningTest extends TestCase
 
     public function test_only_claimant_and_owner_can_download_proof(): void
     {
-        Storage::fake('public');
-        Storage::disk('public')->put('claims/bukti.jpg', 'x');
+        Storage::fake('local');
+        Storage::disk('local')->put('claims/bukti.jpg', 'x');
 
         $owner = User::factory()->create();
         $claimant = User::factory()->create();
