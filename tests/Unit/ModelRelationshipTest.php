@@ -43,12 +43,14 @@ class ModelRelationshipTest extends TestCase
     public function test_database_seeder_runs_cleanly_and_is_idempotent(): void
     {
         $this->seed(DatabaseSeeder::class);
+
+        $counts = [User::count(), Item::count(), Comment::count(), Claim::count()];
+
         $this->seed(DatabaseSeeder::class);
 
-        $this->assertDatabaseHas('users', ['email' => 'kenny@mahasiswa.upnvj.ac.id', 'nim' => '2510512027']);
+        $this->assertSame($counts, [User::count(), Item::count(), Comment::count(), Claim::count()]);
+        $this->assertDatabaseHas('users', ['email' => '2510512027@mahasiswa.upnvj.ac.id', 'nim' => '2510512027']);
         $this->assertDatabaseHas('users', ['email' => 'dosen@dosen.upnvj.ac.id']);
         $this->assertGreaterThanOrEqual(6, Item::count());
-        $this->assertGreaterThanOrEqual(3, Comment::count());
-        $this->assertGreaterThanOrEqual(2, Claim::count());
     }
 }
