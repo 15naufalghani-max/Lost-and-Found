@@ -150,46 +150,6 @@ class ItemController extends Controller
      *
      * @return Collection<int, array{item: Item, score: int, reason: string}>
      */
-    private function findSmartMatches(Item $item, MatchProvider $matcher, KeywordMatcher $fallback): Collection
-    {
-        if ($item->type !== Item::TYPE_LOST || $item->status !== Item::STATUS_OPEN) {
-            return collect();
-        }
-
-        $candidates = Item::query()
-            ->found()
-            ->open()
-            ->where('id', '!=', $item->id)
-            ->latest()
-            ->limit(10)
-            ->get();
-
-        if ($candidates->isEmpty()) {
-            return collect();
-        }
-
-        $lostSnapshot = ItemSnapshot::from($item);
-        $candSnapshots = $candidates->map(fn (Item $c) => ItemSnapshot::from($c));
-
-        try {
-            $scores = $matcher->score($lostSnapshot, $candSnapshots);
-        } catch (\Throwable) {
-            $scores = $fallback->score($lostSnapshot, $candSnapshots);
-        }
-
-        $byId = $candidates->keyBy('id');
-
-        return collect($scores)
-            ->filter(fn (array $row) => ($row['score'] ?? 0) > 0 && $byId->has($row['id']))
-            ->sortByDesc('score')
-            ->take(3)
-            ->map(fn (array $row) => [
-                'item' => $byId->get($row['id']),
-                'score' => (int) $row['score'],
-                'reason' => (string) ($row['reason'] ?? ''),
-            ])
-            ->values();
-    }
 
     /**
      * Render frontend Blade view when available, otherwise use backend fallback view.
