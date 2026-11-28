@@ -29,6 +29,16 @@ class ClaimController extends Controller
                 ->with('error', 'Barang ini sudah tidak menerima klaim.');
         }
 
+        if ($item->status !== Item::STATUS_OPEN || $item->isExpired()) {
+            return redirect()->route('items.show', $item)
+                ->with('error', 'Barang ini sudah tidak menerima klaim.');
+        }
+
+        if ($item->type !== Item::TYPE_FOUND) {
+            return redirect()->route('items.show', $item)
+                ->with('error', 'Klaim hanya dapat diajukan untuk barang temuan.');
+        }
+
         $view = view()->exists('claims.create') ? 'claims.create' : 'backend.claims.create';
 
         return view($view, [
@@ -49,6 +59,14 @@ class ClaimController extends Controller
 
         if ($item->status !== Item::STATUS_OPEN || $item->isExpired()) {
             return back()->with('error', 'Barang ini sudah selesai atau kadaluwarsa.');
+        }
+
+                if ($item->status !== Item::STATUS_OPEN || $item->isExpired()) {
+            return back()->with('error', 'Barang ini sudah selesai atau kadaluwarsa.');
+        }
+
+        if ($item->type !== Item::TYPE_FOUND) {                       // ← BARU
+            return back()->with('error', 'Klaim hanya dapat diajukan untuk barang temuan.');
         }
 
         $alreadyPending = $item->claims()
