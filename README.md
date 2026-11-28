@@ -6,15 +6,16 @@ An application for tracking students lost item and gave back their lost item.
 - Composer
 - MySQL (XAMPP)
 ## Running it from scratch
-1. `git clone https://github.com/NAME/campus-app.git`
-2. `cd campus-app`
+1. `git clone https://github.com/15naufalghani-max/Lost-and-Found.git`
+2. `cd Lost-and-Found`
 3. `composer install`
-4. `cp .env.example .env` (Windows: `copy .env.example .env`)
-5. Create an empty database called `campus_db` in phpMyAdmin
-6. Adjust DB_DATABASE in the `.env` file
+4. `npm install` lalu `npm run build`
+5. `copy .env.example .env`
+6. Buat database kosong `lostfound_fik` di phpMyAdmin
 7. `php artisan key:generate`
-8. `php artisan migrate --seed`
-9. `php artisan serve` then open http://127.0.0.1:8000
+8. `php artisan migrate:fresh --seed`
+9. `php artisan storage:link`
+10. `php artisan serve`, lalu buka http://127.0.0.1:8000
 ## Division of work
 | Name 				            | Student no. | Part built 				                     |
 |-------------------------------|-------------|----------------------------------------------|
